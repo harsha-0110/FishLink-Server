@@ -49,8 +49,10 @@ app.post('/signup', async (req, res) => {
       const newUser = new User({ username, password, email, userType });
       await newUser.save();
       res.status(200).send('User registered successfully.');
+      console.log('User registered successfully.')
     } catch (error) {
       res.status(400).send('Error registering user.');
+      console.log('Error registering user.')
     }
   });
 
@@ -61,11 +63,14 @@ app.post('/login', async (req, res) => {
     const user = await User.findOne({ username, password });
     if (user) {
       res.status(200).send('Login successful.');
+      console.log('Login successful.')
     } else {
       res.status(401).send('Invalid username or password.');
+      console.log('Invalid username or password.')
     }
   } catch (error) {
     res.status(400).send('Error logging in.');
+    console.log('Error logging in.')
   }
 });
 
