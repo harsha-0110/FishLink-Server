@@ -14,9 +14,18 @@ exports.signup = async (req, res) => {
 
     try {
         let user = await User.findOne({ email });
-        console.log('Done')
         if (user) {
-            return res.status(400).json({ msg: 'User already exists' });
+            return res.status(400).json({ msg: 'Email already exists' });
+        }
+
+        let user1 = await User.findOne({ username });
+        if (user1) {
+            return res.status(400).json({ msg: 'Username Taken' });
+        }
+
+        let user2 = await User.findOne({ phone });
+        if (user2) {
+            return res.status(400).json({ msg: 'Phone Number Linked with another account' });
         }
 
         if (!passwordLengthRegex.test(password)) {
@@ -57,7 +66,7 @@ exports.signup = async (req, res) => {
         res.json({ msg: 'User registered successfully' });
     } catch (error) {
         console.error(error.message);
-        res.status(500).send('Server Error');
+        res.status(500).json({ msg: 'Server error' });
     }
 };
 
@@ -65,31 +74,26 @@ exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email });
-
+        const user = await User.findOne({ email });
         if (!user) {
-            console.log('Invalid credentials1')
-            return res.status(400).json({ msg: 'Invalid credentials' });
+            return res.status(400).json({ msg: 'Email Not Found' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            console.log('Invalid credentials')
-            return res.status(400).json({ msg: 'Invalid credentials2' });
+            return res.status(400).json({ msg: 'Invalid credentials' });
         }
-
         const payload = {
             user: {
                 id: user.id
             }
         };
-
+        
         jwt.sign(payload, 'jwtSecret', { expiresIn: 3600 }, (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.json({ token, userType: user.userType });
         });
-        console.log('Done')
     } catch (error) {
         console.error(error.message);
         res.status(500).send('Server Error');
