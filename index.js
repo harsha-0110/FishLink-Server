@@ -13,7 +13,7 @@ app.use(express.json({ extended: false }));
 app.use('/api', require('./src/routes/authRoutes'));
 
 app.get('/verification', (req, res) => {
-    res.sendFile(__dirname + '/src/controllers/verification.html');
+    res.sendFile(__dirname + '/templates/verification.html');
 });
 
 const PORT = process.env.PORT || 5000;

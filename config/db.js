@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const MONGODB_URI = 'mongodb://localhost:27017/fishlink'; // Your MongoDB URI
+const MONGODB_URI = process.env.DBHOST;
 
 const connectDB = async () => {
     try {

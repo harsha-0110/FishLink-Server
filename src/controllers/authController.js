@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
+
 
 exports.signup = async (req, res) => {
     const { name, email, username, phone, password, userType } = req.body;
@@ -82,13 +84,13 @@ const sendVerificationEmail = (email, userId) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'harshavardhan.a0110@gmail.com', // Your Gmail email address
-            pass: '' // Your Gmail email password
+            user: process.env.EMAIL, // Your Gmail email address
+            pass: process.env.PASS // Your Gmail email password
         }
     });
 
     const mailOptions = {
-        from: 'harshavardhan.a0110@gmail.com',
+        from: process.env.EMAIL,
         to: email,
         subject: 'Account Verification',
         html: `

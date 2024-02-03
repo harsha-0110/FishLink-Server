@@ -12,6 +12,9 @@ router.post('/signup', authController.signup);
 // @access  Public
 router.post('/login', authController.login);
 
+// @route   GET api//verify/:token
+// @desc    Verify Email
+// @access  Public
 router.get('/verify/:token', authController.verifyAccount);
 
 module.exports = router;
