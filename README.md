@@ -8,6 +8,6 @@ Before running the project, make sure to set up your environment variables by cr
 
 ### Environment Variables
 
-- **DBHOST**: Replace `'YOUR-DB-URL'` with the URL of your database.
-- **EMAIL**: Replace `'YOUR-EMAIL-ID'` with your email address.
-- **PASS**: Replace `'YOUR-EMAIL-ID-APP-PASSWORD'` with the password or application password for your email account.
+- `DBHOST = 'YOUR-DB-URL'`
+- `EMAIL = 'YOUR-EMAIL-ID'`
+- `PASS = 'YOUR-EMAIL-ID-APP-PASSWORD'`
