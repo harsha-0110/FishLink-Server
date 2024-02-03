@@ -12,4 +12,6 @@ router.post('/signup', authController.signup);
 // @access  Public
 router.post('/login', authController.login);
 
+router.get('/verify/:token', authController.verifyAccount);
+
 module.exports = router;

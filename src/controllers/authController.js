@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const nodemailer = require('nodemailer');
 
 exports.signup = async (req, res) => {
     const { name, email, username, phone, password, userType } = req.body;
@@ -48,7 +49,7 @@ exports.signup = async (req, res) => {
             return res.status(400).json({ msg: 'Password must contain at least one special character (@#$%^&+=)' });
         }
 
-        // If all constraints are met, proceed to save the user
+        // If all constraints are met, proceed to save the user with verified status false
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -58,15 +59,91 @@ exports.signup = async (req, res) => {
             username,
             phone,
             password: hashedPassword,
-            userType
+            userType,
+            verified: false // Set verified status to false
         });
 
         await user.save();
 
-        res.json({ msg: 'User registered successfully' });
+        // Send verification email
+        sendVerificationEmail(email, user._id.toString());
+
+        res.json({ msg: 'User registered successfully. Please check your email for verification instructions.' });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });
+    }
+};
+
+// Function to send verification email
+const sendVerificationEmail = (email, userId) => {
+    const token = jwt.sign({ userId }, 'jwtSecret', { expiresIn: '1d' });
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'harshavardhan.a0110@gmail.com', // Your Gmail email address
+            pass: '' // Your Gmail email password
+        }
+    });
+
+    const mailOptions = {
+        from: 'harshavardhan.a0110@gmail.com',
+        to: email,
+        subject: 'Account Verification',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <p style="text-align: center;">
+                    <h1>Welcome to FishLink</h1>
+                </p>
+                <p style="font-size: 16px;">Thank you for signing up!</p>
+                <p style="font-size: 16px;">Please click the following button to verify your account:</p>
+                <p style="text-align: center;">
+                    <a href="http://192.168.216.129:5000/api/verify/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px;">Verify Account</a>
+                </p>
+            </div>
+        `
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+};
+
+// Endpoint to handle account verification
+exports.verifyAccount = async (req, res) => {
+    const token = req.params.token;
+
+    if (!token) {
+        return res.redirect('/verification?msg=Invalid%20token');
+    }
+
+    try {
+        // Verify the token
+        const decoded = jwt.verify(token, 'jwtSecret');
+        // Extract user ID from the token payload
+        const userId = decoded.userId;
+        
+
+        // Find the user in the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+            res.redirect('/verification?msg=User%20not%20found');
+        }
+
+        // Update user's verified status to true
+        user.verified = true;
+        await user.save();
+
+        res.redirect('/verification?msg=Account%20verified%20successfully');
+    } catch (error) {
+        console.error(error.message);
+        res.redirect('/verification?msg=Server%20error');
     }
 };
 
@@ -80,10 +157,16 @@ exports.login = async (req, res) => {
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        const isVerified = user.verified;
 
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid credentials' });
         }
+
+        if (!isVerified) {
+            return res.status(400).json({ msg: 'User not verified' });
+        }
+
         const payload = {
             user: {
                 id: user.id

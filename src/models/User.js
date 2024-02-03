@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
     userType: {
         type: String,
         required: true
+    },
+    verified: {
+        type: Boolean,
+        required: true
     }
 });
 
