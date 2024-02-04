@@ -79,7 +79,7 @@ exports.signup = async (req, res) => {
 
 // Function to send verification email
 const sendVerificationEmail = (email, userId) => {
-    const token = jwt.sign({ userId }, 'jwtSecret', { expiresIn: '1d' });
+    const token = jwt.sign({ userId }, process.env.JWT, { expiresIn: '1d' });
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -126,7 +126,7 @@ exports.verifyAccount = async (req, res) => {
 
     try {
         // Verify the token
-        const decoded = jwt.verify(token, 'jwtSecret');
+        const decoded = jwt.verify(token, process.env.JWT);
         // Extract user ID from the token payload
         const userId = decoded.userId;
         
@@ -175,7 +175,7 @@ exports.login = async (req, res) => {
             }
         };
         
-        jwt.sign(payload, 'jwtSecret', { expiresIn: 3600 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT, { expiresIn: 3600 }, (err, token) => {
             if (err) throw err;
             res.json({ token, userType: user.userType });
         });

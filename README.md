@@ -11,3 +11,4 @@ Before running the project, make sure to set up your environment variables by cr
 - `DBHOST = 'YOUR-DB-URL'`
 - `EMAIL = 'YOUR-EMAIL-ID'`
 - `PASS = 'YOUR-EMAIL-ID-APP-PASSWORD'`
+- `JWT = 'JWT-SECRET'`
