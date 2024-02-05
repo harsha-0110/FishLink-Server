@@ -11,9 +11,14 @@ app.use(express.json({ extended: false }));
 
 // Define Routes
 app.use('/api', require('./src/routes/authRoutes'));
+app.use('/api', require('./src/controllers/fpController'));
 
 app.get('/verification', (req, res) => {
     res.sendFile(__dirname + '/templates/verification.html');
+});
+
+app.get('/reset-password/', (req, res) => {
+    res.sendFile(__dirname + '/templates/reset-password.html');
 });
 
 const PORT = process.env.PORT || 5000;
