@@ -1,19 +1,21 @@
 // catchController.js under controllers folder
 const Catch = require('../models/Catch');
+const User = require('../models/User');
 
 exports.addCatch = async (req, res) => {
-    const { name, images, location, basePrice, quantity, startTime, endTime } = req.body;
+    const { name, email, images, location, basePrice, quantity, startTime, endTime } = req.body;
 
     try {
+        const user = await User.findOne({ email });
         const catchObj = new Catch({
             name,
             images,
             location,
             basePrice,
             quantity,
-            startTime,
-            endTime,
-            seller: req.user.id, // Assuming you have middleware to extract the user from the token
+            startTime: Date.now(),
+            endTime: Date.now(),
+            seller: user.id, // Assuming you have middleware to extract the user from the token
             status: 'available'
         });
 

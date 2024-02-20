@@ -8,7 +8,6 @@ const CatchSchema = new mongoose.Schema({
     },
     images: {
         type: [String], // Array of image URLs
-        required: true
     },
     location: {
         type: String,
