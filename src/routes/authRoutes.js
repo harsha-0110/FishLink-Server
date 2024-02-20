@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
+const catchController = require('../controllers/catchController');
 
 // @route   POST api/signup
 // @desc    Register user
@@ -16,5 +17,8 @@ router.post('/login', authController.login);
 // @desc    Verify Email
 // @access  Public
 router.get('/verify/:token', authController.verifyAccount);
+
+
+router.post('/add-catch', authMiddleware, catchController.addCatch);
 
 module.exports = router;
