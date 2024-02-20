@@ -13,8 +13,8 @@ exports.addCatch = async (req, res) => {
             location,
             basePrice,
             quantity,
-            startTime: Date.now(),
-            endTime: Date.now(),
+            startTime,
+            endTime,
             seller: user.id, // Assuming you have middleware to extract the user from the token
             status: 'available'
         });
