@@ -1,4 +1,4 @@
-// catch.js under models folder
+// Catch.js under models folder
 const mongoose = require('mongoose');
 
 const CatchSchema = new mongoose.Schema({
