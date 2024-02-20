@@ -49,5 +49,7 @@ router.put('/catch/:id', catchController.updateCatch);
 // @access  Private (Seller only)
 router.delete('/catch/:id', catchController.deleteCatch);
 
+router.get('/catches', catchController.getAllCatches);
+
 
 module.exports = router;

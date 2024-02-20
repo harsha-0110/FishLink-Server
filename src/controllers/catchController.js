@@ -13,7 +13,8 @@ exports.addCatch = async (req, res) => {
             quantity,
             startTime,
             endTime,
-            seller: req.user.id // Assuming you have middleware to extract the user from the token
+            seller: req.user.id, // Assuming you have middleware to extract the user from the token
+            status: 'available'
         });
 
         await catchObj.save();
@@ -38,7 +39,10 @@ exports.getCatchesBySeller = async (req, res) => {
 
 exports.getAllCatches = async (req, res) => {
     try {
-        const catches = await Catch.find().populate('seller', 'name email'); // Populate the seller details
+        const { status } = req.query;
+        const query = status ? { status } : {};
+
+        const catches = await Catch.find(query).populate('seller', 'name email');
 
         res.json(catches);
     } catch (error) {
@@ -46,6 +50,7 @@ exports.getAllCatches = async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 };
+
 
 exports.getCatchById = async (req, res) => {
     const catchId = req.params.id;
