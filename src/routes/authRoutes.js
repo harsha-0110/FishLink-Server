@@ -29,5 +29,25 @@ router.post('/seller/add-catch', catchController.addCatch);
 // @access  Private (Seller only)
 router.get('/seller/catches', catchController.getCatchesBySeller);
 
+// @route   GET api/catches
+// @desc    Get all catches
+// @access  Public
+router.get('/catches', catchController.getAllCatches);
+
+// @route   GET api/catch/:id
+// @desc    Get a specific catch by ID
+// @access  Public
+router.get('/catch/:id', catchController.getCatchById);
+
+// @route   PUT api/catch/:id
+// @desc    Update a specific catch by ID
+// @access  Private (Seller only)
+router.put('/catch/:id', catchController.updateCatch);
+
+// @route   DELETE api/catch/:id
+// @desc    Delete a specific catch by ID
+// @access  Private (Seller only)
+router.delete('/catch/:id', catchController.deleteCatch);
+
 
 module.exports = router;
