@@ -35,7 +35,7 @@ router.post('/forgot-password', async (req, res) => {
             subject: 'Reset Password',
             html: `
                 <p>Please click the following link to reset your password:</p>
-                <a href="http://192.168.216.129:5000/reset-password/?tkn=${token}">Reset Password</a>
+                <a href="${process.env.URL}/reset-password/?tkn=${token}">Reset Password</a>
             `
         };
 

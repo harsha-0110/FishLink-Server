@@ -101,7 +101,7 @@ const sendVerificationEmail = (email, userId) => {
                 <p style="font-size: 16px;">Thank you for signing up!</p>
                 <p style="font-size: 16px;">Please click the following button to verify your account:</p>
                 <p style="text-align: center;">
-                    <a href="http://192.168.216.129:5000/api/verify/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px;">Verify Account</a>
+                    <a href="${process.env.URL}/api/verify/${token}" style="display: inline-block; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px;">Verify Account</a>
                 </p>
             </div>
         `
