@@ -63,29 +63,52 @@ router.post('/reset-password/:token', async (req, res) => {
         // Verify the token
         const decoded = jwt.verify(token, process.env.JWT);
         const email = decoded.email;
-
+    
         // Find the user by email
         let user = await User.findOne({ email });
-
+    
         if (!user) {
             return res.status(400).json({ msg: 'User not found' });
         }
+    
         // Check if passwords match
         if (password !== confirmPassword) {
             return res.status(400).json({ msg: 'Passwords do not match' });
         }
-
-        // Check password constraints
-        // Add your password constraints logic here
-
+    
+        // Check password length
+        if (password.length < 8 || password.length > 16) {
+            return res.status(400).json({ msg: 'Password must be between 8 and 16 characters long' });
+        }
+    
+        // Check for at least one uppercase letter
+        if (!/[A-Z]/.test(password)) {
+            return res.status(400).json({ msg: 'Password must contain at least one uppercase letter' });
+        }
+    
+        // Check for at least one lowercase letter
+        if (!/[a-z]/.test(password)) {
+            return res.status(400).json({ msg: 'Password must contain at least one lowercase letter' });
+        }
+    
+        // Check for at least one digit
+        if (!/\d/.test(password)) {
+            return res.status(400).json({ msg: 'Password must contain at least one digit' });
+        }
+    
+        // Check for at least one special character
+        if (!/[@$!%*?&]/.test(password)) {
+            return res.status(400).json({ msg: 'Password must contain at least one special character (@$!%*?&)' });
+        }
+    
         // Hash the new password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-
+    
         // Update the user's password
         user.password = hashedPassword;
         await user.save();
-
+    
         return res.status(200).json({ msg: 'Password reset successfully' });
     } catch (error) {
         console.error(error.message);
