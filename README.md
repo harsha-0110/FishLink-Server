@@ -12,3 +12,4 @@ Before running the project, make sure to set up your environment variables by cr
 - `EMAIL = 'YOUR-EMAIL-ID'`
 - `PASS = 'YOUR-EMAIL-ID-APP-PASSWORD'`
 - `JWT = 'JWT-SECRET'`
+- `URL = 'SERVER-URL'`
