@@ -19,6 +19,6 @@ router.post('/login', authController.login);
 router.get('/verify/:token', authController.verifyAccount);
 
 
-router.post('/add-catch', authMiddleware, catchController.addCatch);
+router.post('/add-catch', catchController.addCatch);
 
 module.exports = router;
