@@ -19,6 +19,15 @@ router.post('/login', authController.login);
 router.get('/verify/:token', authController.verifyAccount);
 
 
-router.post('/add-catch', catchController.addCatch);
+// @route   POST api/seller/add-catch
+// @desc    Add a new catch
+// @access  Private (Seller only)
+router.post('/seller/add-catch', catchController.addCatch);
+
+// @route   GET api/seller/catches
+// @desc    Get all catches of a seller
+// @access  Private (Seller only)
+router.get('/seller/catches', catchController.getCatchesBySeller);
+
 
 module.exports = router;

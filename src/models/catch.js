@@ -1,3 +1,4 @@
+// catch.js under models folder
 const mongoose = require('mongoose');
 
 const CatchSchema = new mongoose.Schema({
@@ -5,15 +6,15 @@ const CatchSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    type: {
-        type: String,
+    images: {
+        type: [String], // Array of image URLs
         required: true
     },
     location: {
         type: String,
         required: true
     },
-    expectedPrice: {
+    basePrice: {
         type: Number,
         required: true
     },
@@ -23,7 +24,7 @@ const CatchSchema = new mongoose.Schema({
     },
     startTime: {
         type: Date,
-        default: Date.now
+        required: true
     },
     endTime: {
         type: Date,
