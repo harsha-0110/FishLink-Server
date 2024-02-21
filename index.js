@@ -7,7 +7,7 @@ const app = express();
 connectDB();
 
 // Init Middleware
-app.use(express.json({ extended: false }));
+app.use(express.json({limit: '50mb'}));
 
 // Define Routes
 app.use('/api', require('./src/routes/authRoutes'));
