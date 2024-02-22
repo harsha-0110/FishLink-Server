@@ -74,8 +74,7 @@ exports.getCatchesBySeller = async (req, res) => {
 
 exports.getAllCatches = async (req, res) => {
     try {
-        const { status } = req.query;
-        const query = status ? { status } : {};
+        const query = 'active';
 
         const catches = await Catch.find(query).populate('seller', 'name email');
 
