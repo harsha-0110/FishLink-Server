@@ -39,15 +39,6 @@ router.get('/catches', catchController.getAllCatches);
 // @access  Public
 router.get('/catch/:id', catchController.getCatchById);
 
-// @route   PUT api/catch/:id
-// @desc    Update a specific catch by ID
-// @access  Private (Seller only)
-router.put('/catch/:id', catchController.updateCatch);
-
-// @route   DELETE api/catch/:id
-// @desc    Delete a specific catch by ID
-// @access  Private (Seller only)
-router.delete('/catch/:id', catchController.deleteCatch);
 
 // @route   PUT api/seller/edit-catch/:id
 // @desc    Edit a specific catch by ID
