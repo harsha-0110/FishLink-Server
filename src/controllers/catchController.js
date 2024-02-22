@@ -2,31 +2,64 @@
 const Catch = require('../models/Catch');
 const User = require('../models/User');
 
+const fs = require('fs');
+const path = require('path');
+
 exports.addCatch = async (req, res) => {
     const { name, email, images, location, basePrice, quantity, startTime, endTime } = req.body;
 
     try {
         const user = await User.findOne({ email });
+        
+        // Array to store file paths of saved images
+        let imagePaths = [];
+
+        // Loop through each base64 encoded image
+        for (let i = 0; i < images.length; i++) {
+            // Decode base64 image
+            const base64Data = images[i].replace(/^data:image\/\w+;base64,/, '');
+            const buffer = Buffer.from(base64Data, 'base64');
+
+            // Generate unique filename
+            const filename = `image_${Date.now()}_${i}.png`; // You can use any desired extension
+
+            // Specify path to save the image
+            const dirPath = path.join(__dirname, '../../uploads', user.id);
+            if (!fs.existsSync(dirPath)) {
+                fs.mkdirSync(dirPath, { recursive: true });
+            }
+            const imagePath = path.join(dirPath, filename);
+            // Save the decoded image to the server
+            fs.writeFileSync(imagePath, buffer);
+
+            // Push the file path to the array
+            imagePaths.push(imagePath);
+        }
+
+        // Create a new catch object with image paths
         const catchObj = new Catch({
             name,
-            images,
+            images: imagePaths,
             location,
             basePrice,
             quantity,
             startTime,
             endTime,
-            seller: user.id, // Assuming you have middleware to extract the user from the token
+            seller: user.id,
             status: 'available'
         });
 
+        // Save the catch object to the database
         await catchObj.save();
 
+        // Respond with success message
         res.status(201).json({ msg: 'Catch added successfully' });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });
     }
 };
+
 
 exports.getCatchesBySeller = async (req, res) => {
     try {
