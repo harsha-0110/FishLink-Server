@@ -177,7 +177,7 @@ exports.login = async (req, res) => {
         
         jwt.sign(payload, process.env.JWT, { expiresIn: 3600 }, (err, token) => {
             if (err) throw err;
-            res.json({ token, name: user.name, userType: user.userType });
+            res.json({ token, name: user.name, userId: user.id , userType: user.userType });
         });
     } catch (error) {
         console.error(error.message);

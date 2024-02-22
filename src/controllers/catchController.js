@@ -62,9 +62,9 @@ exports.addCatch = async (req, res) => {
 
 
 exports.getCatchesBySeller = async (req, res) => {
+    const id = req.params.id;
     try {
-        const catches = await Catch.find({ seller: req.user.id }).populate('seller', 'name email'); // Populate the seller details
-
+        const catches = await Catch.find({ seller: id }).populate('seller', 'name email'); // Populate the seller details
         res.json(catches);
     } catch (error) {
         console.error(error.message);

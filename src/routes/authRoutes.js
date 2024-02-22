@@ -27,7 +27,7 @@ router.post('/seller/add-catch', catchController.addCatch);
 // @route   GET api/seller/catches
 // @desc    Get all catches of a seller
 // @access  Private (Seller only)
-router.get('/seller/catches', catchController.getCatchesBySeller);
+router.get('/seller/catches/:id', catchController.getCatchesBySeller);
 
 // @route   GET api/catches
 // @desc    Get all catches
