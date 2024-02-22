@@ -142,7 +142,20 @@ exports.deleteCatch = async (req, res) => {
             return res.status(404).json({ msg: 'Catch not found' });
         }
 
-        await catchObj.remove();
+        // Retrieve the array of image locations
+        const imageLocations = catchObj.images;
+
+        // Iterate over each image location and delete the corresponding image file
+        imageLocations.forEach(imageLocation => {
+            const imagePath = imageLocation;
+
+            // Check if the image file exists before attempting to delete it
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        });
+
+        await Catch.findByIdAndDelete(catchId);
 
         res.json({ msg: 'Catch deleted successfully' });
     } catch (error) {
