@@ -152,4 +152,57 @@ exports.deleteCatch = async (req, res) => {
     }
 };
 
+
+const Catch = require('../models/Catch');
+const User = require('../models/User');
+
+// ... existing code ...
+
+exports.editCatch = async (req, res) => {
+    const catchId = req.params.id;
+    const { name, images, location, basePrice, quantity, startTime, endTime } = req.body;
+
+    try {
+        let catchObj = await Catch.findById(catchId);
+
+        if (!catchObj) {
+            return res.status(404).json({ msg: 'Catch not found' });
+        }
+
+        // Update catch details
+        catchObj.name = name;
+        catchObj.images = images;
+        catchObj.location = location;
+        catchObj.basePrice = basePrice;
+        catchObj.quantity = quantity;
+        catchObj.startTime = startTime;
+        catchObj.endTime = endTime;
+
+        await catchObj.save();
+
+        res.json({ msg: 'Catch updated successfully' });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};
+
+exports.deleteCatch = async (req, res) => {
+    const catchId = req.params.id;
+
+    try {
+        const catchObj = await Catch.findById(catchId);
+
+        if (!catchObj) {
+            return res.status(404).json({ msg: 'Catch not found' });
+        }
+
+        await catchObj.remove();
+
+        res.json({ msg: 'Catch deleted successfully' });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};
 // Other methods...
