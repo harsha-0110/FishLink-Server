@@ -33,7 +33,7 @@ exports.addCatch = async (req, res) => {
             fs.writeFileSync(imagePath, buffer);
 
             // Push the file path to the array
-            imagePaths.push(imagePath);
+            imagePaths.push(`/uploads/${user.id}/${filename}`);
         }
 
         // Create a new catch object with image paths
@@ -74,9 +74,8 @@ exports.getCatchesBySeller = async (req, res) => {
 
 exports.getAllCatches = async (req, res) => {
     try {
-        const query = 'active';
 
-        const catches = await Catch.find(query).populate('seller', 'name email');
+        const catches = await Catch.find({ status: "available" }).populate('seller', 'name email');
 
         res.json(catches);
     } catch (error) {
@@ -147,11 +146,11 @@ exports.deleteCatch = async (req, res) => {
 
         // Iterate over each image location and delete the corresponding image file
         imageLocations.forEach(imageLocation => {
-            const imagePath = imageLocation;
-
+            const dirPath = path.join(__dirname, '../../', imageLocation);
+            console.log(dirPath);
             // Check if the image file exists before attempting to delete it
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
+            if (fs.existsSync(dirPath)) {
+                fs.unlinkSync(dirPath);
             }
         });
 

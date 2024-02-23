@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const path = require('path');
 
 const app = express();
 
@@ -20,6 +21,9 @@ app.get('/verification', (req, res) => {
 app.get('/reset-password/', (req, res) => {
     res.sendFile(__dirname + '/templates/reset-password.html');
 });
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 const PORT = process.env.PORT || 5000;
 
