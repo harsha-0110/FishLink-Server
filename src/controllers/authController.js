@@ -168,14 +168,14 @@ exports.login = async (req, res) => {
         if (!isVerified) {
             return res.status(400).json({ msg: 'User not verified' });
         }
-
+        const expiresInSeconds = 15 * 24 * 60 * 60;
         const payload = {
             user: {
                 id: user.id
             }
         };
         
-        jwt.sign(payload, process.env.JWT, { expiresIn: 3600 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT, { expiresIn: expiresInSeconds }, (err, token) => {
             if (err) throw err;
             res.json({ token, name: user.name, userId: user.id , userType: user.userType });
         });

@@ -147,7 +147,6 @@ exports.deleteCatch = async (req, res) => {
         // Iterate over each image location and delete the corresponding image file
         imageLocations.forEach(imageLocation => {
             const dirPath = path.join(__dirname, '../../', imageLocation);
-            console.log(dirPath);
             // Check if the image file exists before attempting to delete it
             if (fs.existsSync(dirPath)) {
                 fs.unlinkSync(dirPath);
