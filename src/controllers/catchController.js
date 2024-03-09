@@ -42,6 +42,7 @@ exports.addCatch = async (req, res) => {
             images: imagePaths,
             location,
             basePrice,
+            currentBid: basePrice,
             quantity,
             startTime,
             endTime,
