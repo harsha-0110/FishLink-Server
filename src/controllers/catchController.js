@@ -96,6 +96,15 @@ exports.getCatchById = async (req, res) => {
             return res.status(404).json({ msg: 'Catch not found' });
         }
 
+        // Check if there's a highestBidder field
+        if (catchObj.highestBidder) {
+            const user = await User.findById(catchObj.highestBidder);
+            if (user) {
+                // Replace highestBidder with the username
+                catchObj.highestBidder = user.username;
+            }
+        }
+
         res.json(catchObj);
     } catch (error) {
         console.error(error.message);
