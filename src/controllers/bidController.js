@@ -21,6 +21,11 @@ exports.placeBid = async (req, res) => {
             return res.status(400).json({ error: 'Bidding for this item has ended' });
         }
 
+        const updatedItem = await Catch.updateOne(
+            { _id: catchId },
+            { $set: { currentBid: bidAmount, highestBidder: userId } }
+        );
+
         // Check if the user has already placed a bid
         const existingBid = await Bid.findOne({ catchId: catchId, userId: userId });
 
