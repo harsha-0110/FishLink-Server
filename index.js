@@ -13,7 +13,8 @@ app.use(express.json({limit: '50mb'}));
 // Define Routes
 app.use('/api', require('./src/routes/authRoutes'));
 app.use('/api', require('./src/routes/bidRoutes'));
-app.use('/api', require('./src/controllers/fpController'));
+app.use('/api', require('./src/routes/catchRoutes'));
+app.use('/api', require('./src/routes/fpRoutes'));
 
 app.get('/verification', (req, res) => {
     res.sendFile(__dirname + '/templates/verification.html');

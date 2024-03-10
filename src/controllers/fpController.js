@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-router.post('/forgot-password', async (req, res) => {
+exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
@@ -52,10 +52,10 @@ router.post('/forgot-password', async (req, res) => {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+};
 
 // Route to handle password reset submission
-router.post('/reset-password/:token', async (req, res) => {
+exports.resetPassword = async (req, res) => {
     const token = req.params.token;
     const { password, confirmPassword } = req.body;
 
@@ -114,6 +114,4 @@ router.post('/reset-password/:token', async (req, res) => {
         console.error(error.message);
         return res.status(500).json({ msg: 'Invalid Link' });
     }
-});
-
-module.exports = router;
+};
