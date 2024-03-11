@@ -27,6 +27,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    deviceId: {
+        type: String
+    },
     verified: {
         type: Boolean,
         required: true

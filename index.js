@@ -15,6 +15,7 @@ app.use('/api', require('./src/routes/authRoutes'));
 app.use('/api', require('./src/routes/bidRoutes'));
 app.use('/api', require('./src/routes/catchRoutes'));
 app.use('/api', require('./src/routes/fpRoutes'));
+app.use('/api/user', require('./src/routes/oneSignalRoutes'));
 
 app.get('/verification', (req, res) => {
     res.sendFile(__dirname + '/templates/verification.html');
