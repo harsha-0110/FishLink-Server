@@ -1,7 +1,7 @@
 // catchController.js under controllers folder
 const Catch = require('../models/Catch');
 const User = require('../models/User');
-
+const notify = require('./oneSignalController');
 const fs = require('fs');
 const path = require('path');
 
@@ -52,7 +52,7 @@ exports.addCatch = async (req, res) => {
 
         // Save the catch object to the database
         await catchObj.save();
-
+        notify.sendNotificationToAllPlayers("New Catch Added", name);
         // Respond with success message
         res.status(201).json({ msg: 'Catch added successfully' });
     } catch (error) {

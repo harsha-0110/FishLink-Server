@@ -2,26 +2,22 @@ const OneSignal = require('onesignal-node');
 require('dotenv').config();
 
 // OneSignal Client Setup
-const client = new OneSignal.Client({
-    userAuthKey: process.env.OSAPIKEY,
-    app: { appAuthKey: process.env.OSAPIKEY, appId: process.env.OSAPPID }
-});
+const client = new OneSignal.Client(process.env.OSAPPID, process.env.OSAPIKEY,);
 
 // Function 1: Send notification to all players
 async function sendNotificationToAllPlayers(title, message) {
-    const notification = new OneSignal.Notification({
+    const notification = {
         contents: {
             en: message
         },
         headings: {
             en: title
         },
-        included_segments: ["All"]
-    });
+        included_segments: ['All']
+    };
 
     try {
-        const response = await client.sendNotification(notification);
-        console.log('Notification sent to all players:', response);
+        const response = await client.createNotification(notification);
     } catch (error) {
         console.error('Error sending notification:', error);
     }
@@ -29,19 +25,18 @@ async function sendNotificationToAllPlayers(title, message) {
 
 // Function 2: Send notification to select players
 async function sendNotificationToSelectPlayers(title, message, playerIds) {
-    const notification = new OneSignal.Notification({
+    const notification = {
         contents: {
             en: message
         },
         headings: {
             en: title
         },
-        include_player_ids: playerIds 
-    });
-
+        include_player_ids: playerIds
+    };
+    
     try {
         const response = await client.sendNotification(notification);
-        console.log('Notification sent to select players:', response);
     } catch (error) {
         console.error('Error sending notification:', error);
     }
