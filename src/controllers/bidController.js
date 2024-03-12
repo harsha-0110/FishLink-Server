@@ -53,3 +53,15 @@ exports.placeBid = async (req, res) => {
     }
 };
   
+exports.getMyBids = async (req, res) => {
+    try {
+      const { userId } = req.params;
+  
+      const myBids = await Bid.find({ userId }).sort({ timestamp: 'desc' });
+  
+      res.status(200).json(myBids);
+    } catch (error) {
+      console.error('Error fetching bids:', error);
+      res.status(500).json({ error: 'Failed to fetch bids' });
+    }
+  };
