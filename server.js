@@ -16,6 +16,8 @@ app.use('/api', require('./src/routes/bidRoutes'));
 app.use('/api', require('./src/routes/catchRoutes'));
 app.use('/api', require('./src/routes/fpRoutes'));
 app.use('/api/user', require('./src/routes/oneSignalRoutes'));
+app.use('/api/ratings', require('./src/routes/ratingRoutes'));
+
 
 app.get('/verification', (req, res) => {
     res.sendFile(__dirname + '/templates/verification.html');
