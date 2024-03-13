@@ -4,6 +4,7 @@ const User = require('../models/User');
 const notify = require('./oneSignalController');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
 
 exports.addCatch = async (req, res) => {
     const { name, email, images, location, basePrice, quantity, startTime, endTime } = req.body;
@@ -52,7 +53,8 @@ exports.addCatch = async (req, res) => {
 
         // Save the catch object to the database
         await catchObj.save();
-        notify.sendNotificationToAllPlayers("New Catch Added", name);
+        const imgUrl = `${process.env.URL}${imagePaths[0]}`;
+        notify.sendNotificationToAllPlayers("New Catch Added", name, imgUrl);
         // Respond with success message
         res.status(201).json({ msg: 'Catch added successfully' });
     } catch (error) {
