@@ -3,7 +3,7 @@ const Rating = require('../models/Rating');
 
 exports.createRating = async (req, res) => {
     const { userId, catchId, rating, feedback } = req.body;
-
+    console.log(userId);
     try {
         const newRating = new Rating({
             userId,
