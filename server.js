@@ -3,7 +3,7 @@ const connectDB = require('./config/db');
 const cron = require('node-cron');
 const path = require('path');
 const Catch = require('./src/models/Catch');
-
+const auction = require('./src/controllers/auctionController');
 const app = express();
 
 // Connect Database
@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
-/*cron.schedule('* * * * * *', async () => { 
+cron.schedule('*/60 * * * * *', async () => { 
     try {
         const currentTime = new Date();
         const availableCatches = await Catch.find({
@@ -43,15 +43,10 @@ app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
         });
     
         availableCatches.forEach(catchDetails => {
-            console.log('Catch Details:');
-            console.log('Winner:', catchDetails.highestBidder);
-            console.log('Name:', catchDetails.name);
-            console.log('End Time:', catchDetails.endTime);
-            console.log('Status:', catchDetails.status);
-            console.log('----------------------------------------');
-          });
+          auction.processBidEnd(catchDetails._id);
+        });
       } catch (error) {
         console.error('Error fetching available catches:', error);
         throw error; // Propagate the error to the caller
       }
-});*/
+});

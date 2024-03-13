@@ -44,7 +44,7 @@ async function sendNotificationToSelectPlayers(title, message, playerIds, imageU
     }
 
     try {
-        const response = await client.sendNotification(notification);
+        const response = await client.createNotification(notification);
     } catch (error) {
         console.error('Error sending notification:', error);
     }
