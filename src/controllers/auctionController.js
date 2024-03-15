@@ -19,11 +19,14 @@ async function processBidEnd(catchId) {
       const item = await Catch.findOne({ _id: catchId });
       const winnerId = item.highestBidder;
       const winner = await User.findOne({ _id: winnerId });
-      const playerId =  [winner.deviceId];
+      
   
       // 3. Send notifications (using OneSignal)
-      if (playerId) {
-        await notify.sendNotificationToSelectPlayers("Congratulations!", `You won the auction for ${item.name}`, playerId);
+      if (winner) {
+        const playerId =  [winner.deviceId];
+        if(playerId) {
+          await notify.sendNotificationToSelectPlayers("Congratulations!", `You won the auction for ${item.name}`, playerId);
+        }
       }
   
       // ... Optionally send notifications to other bidders
