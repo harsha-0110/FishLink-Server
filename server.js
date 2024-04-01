@@ -17,6 +17,7 @@ app.use('/api', require('./src/routes/authRoutes'));
 app.use('/api', require('./src/routes/bidRoutes'));
 app.use('/api', require('./src/routes/catchRoutes'));
 app.use('/api', require('./src/routes/fpRoutes'));
+app.use('/api', require('./src/routes/analyticsRoutes'));
 app.use('/api/user', require('./src/routes/oneSignalRoutes'));
 app.use('/api/ratings', require('./src/routes/ratingRoutes'));
 
