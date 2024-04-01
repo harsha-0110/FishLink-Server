@@ -1,5 +1,4 @@
 const Catch = require('../models/Catch');
-const User = require('../models/User');
 
 exports.analytics = async (req, res) => {
     const sellerId = req.params.sellerId;
