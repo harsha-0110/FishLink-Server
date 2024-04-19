@@ -5,29 +5,37 @@ require('dotenv').config();
 exports.placeBid = async (req, res) => {
     try {
         const { userId, bidAmount, catchId } = req.body;
-        const CatchDetail = await Catch.findOne({ _id: catchId });
-        if (!CatchDetail) {
+        
+        // Find the catch details
+        const catchDetail = await Catch.findById(catchId);
+        
+        // Check if the catch exists
+        if (!catchDetail) {
             return res.status(404).json({ error: 'Catch not found' }); 
         }
-        if (bidAmount <= CatchDetail.currentBid) {
-            return res.status(400).json({ error: 'Bid amount must be higher than current bid' });
-        }
-        if (CatchDetail.highestBidder == userId){
-            return res.status(400).json({ error: 'You are the Higgest Bidder and can\'t place bids.' });
-        }
-
-        // Additional validations: 
-        if (new Date() > CatchDetail.endTime) {
+        
+        // Check if bidding is still open
+        if (new Date() > catchDetail.endTime) {
             return res.status(400).json({ error: 'Bidding for this item has ended' });
         }
+        
+        // Check if the bid amount is higher than the current bid
+        if (bidAmount <= catchDetail.currentBid) {
+            return res.status(400).json({ error: 'Bid amount must be higher than current bid' });
+        }
+        
+        // Check if the user is the highest bidder
+        if (catchDetail.highestBidder == userId){
+            return res.status(400).json({ error: 'You are the Highest Bidder and can\'t place bids.' });
+        }
 
-        const updatedItem = await Catch.updateOne(
-            { _id: catchId },
-            { $set: { currentBid: bidAmount, highestBidder: userId } }
-        );
+        // Update the catch details with the new bid
+        catchDetail.currentBid = bidAmount;
+        catchDetail.highestBidder = userId;
+        await catchDetail.save();
 
         // Check if the user has already placed a bid
-        const existingBid = await Bid.findOne({ catchId: catchId, userId: userId });
+        let existingBid = await Bid.findOne({ catchId: catchId, userId: userId });
 
         if (existingBid) {
             // If the user has already placed a bid, update the existing bid document
@@ -64,4 +72,4 @@ exports.getMyBids = async (req, res) => {
       console.error('Error fetching bids:', error);
       res.status(500).json({ error: 'Failed to fetch bids' });
     }
-  };
+};
