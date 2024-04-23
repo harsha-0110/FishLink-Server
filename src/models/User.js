@@ -33,6 +33,16 @@ const UserSchema = new mongoose.Schema({
     verified: {
         type: Boolean,
         required: true
+    },
+    // New fields
+    bio: {
+        type: String
+    },
+    harbour: {
+        type: String
+    },
+    profilePic: {
+        type: String
     }
 });
 
