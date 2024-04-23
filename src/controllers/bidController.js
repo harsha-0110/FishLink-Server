@@ -63,13 +63,20 @@ exports.placeBid = async (req, res) => {
   
 exports.getMyBids = async (req, res) => {
     try {
-      const { userId } = req.params;
-  
-      const myBids = await Bid.find({ userId }).sort({ timestamp: 'desc' });
-  
-      res.status(200).json(myBids);
+        const { userId } = req.params;
+
+        // Fetch all bids for the given user ID
+        const myBids = await Bid.find({ userId }).sort({ timestamp: 'desc' });
+
+        // Fetch catch details for each bid
+        const bidsWithCatchDetails = await Promise.all(myBids.map(async (bid) => {
+            // Fetch catch details for the current bid
+            const catchDetail = await Catch.findById(bid.catchId);
+            return { ...bid.toObject(), catchDetails: catchDetail };
+        }));
+        res.status(200).json(bidsWithCatchDetails);
     } catch (error) {
-      console.error('Error fetching bids:', error);
-      res.status(500).json({ error: 'Failed to fetch bids' });
+        console.error('Error fetching bids:', error);
+        res.status(500).json({ error: 'Failed to fetch bids' });
     }
 };
