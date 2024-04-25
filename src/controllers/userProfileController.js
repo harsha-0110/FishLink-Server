@@ -128,4 +128,37 @@ exports.updateUserProfile = async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   };
-  
+
+
+  exports.searchUsers = async (req, res) => {
+  const query = req.query.q;
+  try {
+    const users = await User.find({
+      $or: [
+        { name: { $regex: new RegExp(query, 'i') } },
+        { email: { $regex: new RegExp(query, 'i') } },
+        { phone: { $regex: new RegExp(query, 'i') } },
+      ],
+    }).select('-password');
+
+    const usersWithDetails = await Promise.all(users.map(async (user) => {
+      
+
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        userType: user.userType,
+        bio: user.bio,
+        harbour: user.harbour,
+        profilePic: user.profilePic ? `${process.env.URL}${user.profilePic}` : null,
+      };
+    }));
+
+    res.status(200).json(usersWithDetails);
+  } catch (error) {
+    console.error("Error searching users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

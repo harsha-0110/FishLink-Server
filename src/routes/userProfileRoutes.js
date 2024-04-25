@@ -14,5 +14,8 @@ router.get('/userProfile/buyer/:buyerId', userProfileController.getBuyerProfile)
 // Route to update user profile
 router.post('/userProfile/update/:userId', userProfileController.updateUserProfile); // Use :userId as a parameter in the URL
 
+// Route to search for users
+router.get('/userProfile/search', userProfileController.searchUsers);
+
 
 module.exports = router;
