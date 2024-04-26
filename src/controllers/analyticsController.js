@@ -10,6 +10,7 @@ exports.analytics = async (req, res) => {
     const totalCatches = await Catch.countDocuments({ seller: sellerId });
     const activeCatches = await Catch.countDocuments({ seller: sellerId, status: 'available' });
     const soldCatches = await Catch.countDocuments({ seller: sellerId, status: 'sold' });
+    const expiredCatches = await Catch.countDocuments({ seller: sellerId, status: 'expired' });
 
     const totalRevenueResult = await Catch.aggregate([
       {
@@ -33,6 +34,7 @@ exports.analytics = async (req, res) => {
       totalCatches,
       activeCatches,
       soldCatches,
+      expiredCatches,
       totalRevenue,
       ratings
     });

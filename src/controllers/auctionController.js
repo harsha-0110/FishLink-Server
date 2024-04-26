@@ -5,18 +5,29 @@ const notify = require('./oneSignalController');
 
 async function processBidEnd(catchId) {
     try {
-      const updateResult = await Catch.updateOne(
-        { _id: catchId },
-        { $set: { status: 'sold' } }
-      );
-  
-      if (updateResult.modifiedCount === 0) {
-        console.warn(`Auction end: Item not found or already marked as sold. ID: ${catchId}`);
+      // 1. Update the status to 'sold' if there is a highest bidder
+      const item = await Catch.findOne({ _id: catchId });
+      if (item.highestBidder) {
+        const updateResult = await Catch.updateOne(
+          { _id: catchId },
+          { $set: { status: 'sold' } }
+        );
+
+        if (updateResult.modifiedCount === 0) {
+          console.warn(`Auction end: Item not found or already marked as sold. ID: ${catchId}`);
+          return;
+        }
+      } else {
+        // If there is no highest bidder, set the status to 'expired'
+        await Catch.updateOne(
+          { _id: catchId },
+          { $set: { status: 'expired' } }
+        );
+        console.log(`Auction end: Item expired due to no highest bidder. ID: ${catchId}`);
         return;
       }
   
       // 2. Find the winner (highest bidder)
-      const item = await Catch.findOne({ _id: catchId });
       const winnerId = item.highestBidder;
       const winner = await User.findOne({ _id: winnerId });
       
