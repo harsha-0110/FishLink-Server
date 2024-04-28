@@ -53,7 +53,7 @@ exports.addCatch = async (req, res) => {
 
         // Save the catch object to the database
         await catchObj.save();
-        const imgUrl = `${process.env.URL}${imagePaths[0]}`;
+        const imgUrl = `${process.env.SURL}${imagePaths[0]}`;
         notify.sendNotificationToAllPlayers("New Catch Added", name, imgUrl);
         // Respond with success message
         res.status(201).json({ msg: 'Catch added successfully' });
