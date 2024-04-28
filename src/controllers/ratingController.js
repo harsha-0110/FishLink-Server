@@ -1,15 +1,17 @@
-// ratingController.js under controllers folder
 const Rating = require('../models/Rating');
+const Catch = require('../models/Catch');
+const Bid = require('../models/Bid');
+const User = require('../models/User');
+
 
 exports.createRating = async (req, res) => {
-    const { userId, catchId, rating, feedback } = req.body;
-    console.log(userId);
+    const { ratedUserId, rating, comment, commenterUsername } = req.body; // Update property names
     try {
         const newRating = new Rating({
-            userId,
-            catchId,
+            ratedUserId, // Update property name
             rating,
-            feedback
+            comment,
+            commenterUsername // Update property name
         });
 
         await newRating.save();
@@ -21,11 +23,11 @@ exports.createRating = async (req, res) => {
     }
 };
 
-exports.getRatingsByCatchId = async (req, res) => {
-    const { catchId } = req.params;
+exports.getRatingsByUserId = async (req, res) => {
+    const { userId } = req.params;
 
     try {
-        const ratings = await Rating.find({ catchId }).populate('userId', 'username');
+        const ratings = await Rating.find({ ratedUserId: userId }).populate('ratedUserId', 'username');
 
         res.status(200).json(ratings);
     } catch (error) {
