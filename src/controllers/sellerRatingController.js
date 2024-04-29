@@ -1,5 +1,5 @@
 // sellerRatingController.js
-
+const mongoose = require('mongoose');
 const SellerRating = require('../models/sellerRating');
 const User = require('../models/User');
 const Catch = require('../models/Catch');
@@ -9,7 +9,14 @@ const Bid = require('../models/Bid');
 exports.createSellerRating = async (req, res) => {
     try {
         // Extract necessary information from request body
-        const { ratedSellerId, rating, comment, raterUserId, bidId } = req.body;
+        console.log("hi");
+        const { ratedSellerId, rating, comment, raterUserId} = req.body;
+        console.log(ratedSellerId, rating, comment, raterUserId);
+
+        // Validate ObjectId
+        if (!mongoose.Types.ObjectId.isValid(ratedSellerId)) {
+            return res.status(400).json({ error: 'Invalid ratedSellerId' });
+        }
 
         // Check if the rated seller exists
         const ratedSeller = await User.findById(ratedSellerId);
@@ -34,11 +41,6 @@ exports.createSellerRating = async (req, res) => {
         // Save the seller rating to the database
         await newSellerRating.save();
 
-        // Update isSellerRated field in Bid model
-        if (bidId) {
-            await Bid.findByIdAndUpdate(bidId, { isSellerRated: true });
-        }
-
         // Respond with success message
         res.status(201).json({ message: 'Seller rating created successfully', sellerRating: newSellerRating });
     } catch (error) {
@@ -46,7 +48,6 @@ exports.createSellerRating = async (req, res) => {
         res.status(500).json({ error: 'Failed to create seller rating' });
     }
 };
-
 
 // Function to fetch ratings for a specific seller
 exports.getSellerRatings = async (req, res) => {
