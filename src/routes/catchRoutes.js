@@ -33,4 +33,9 @@ router.put('/seller/edit-catch/:id', catchController.editCatch);
 // @access  Private (Seller only)
 router.get('/seller/delete-catch/:id', catchController.deleteCatch);
 
+// @route   GET api/catches/won/:buyerId
+// @desc    Get catches won by ID
+// @access  Private (Buyer only)
+router.get('/catches/won/:buyerId', catchController.getWonCatches);
+
 module.exports = router;
