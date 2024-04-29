@@ -21,6 +21,8 @@ app.use('/api', require('./src/routes/analyticsRoutes'));
 app.use('/api/user', require('./src/routes/oneSignalRoutes'));
 app.use('/api/ratings', require('./src/routes/ratingRoutes'));
 app.use('/api', require('./src/routes/userProfileRoutes'));
+app.use('/api/ratings/sellers', require('./src/routes/sellerRatingRoutes'));
+
 
 
 app.get('/verification', (req, res) => {
