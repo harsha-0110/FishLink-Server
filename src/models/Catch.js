@@ -49,7 +49,8 @@ const CatchSchema = new mongoose.Schema({
     buyerRated: {
         type: Boolean,
         default: false // Indicates whether the buyer has been rated by the seller
-    }
+    },
+    isSellerRated: { type: Boolean, default: false }
     
 });
 
