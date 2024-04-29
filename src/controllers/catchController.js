@@ -1,7 +1,7 @@
-// catchController.js under controllers folder
 const Catch = require('../models/Catch');
 const User = require('../models/User');
 const notify = require('./oneSignalController');
+const Winner = require('../models/Winner');
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
@@ -171,5 +171,23 @@ exports.deleteCatch = async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });
+    }
+};
+
+// Route to get the list of catches won by the buyer
+exports.getWonCatches = async (req, res) => {
+    try {
+      const buyerId = req.params.buyerId;
+  
+      // Find all catches won by the buyer
+      const winnerCatches = await Winner.find({ winnerId: buyerId }).populate('catchId');
+  
+      // Extract relevant information about the won catches
+      const wonCatches = winnerCatches.map(winner => winner.catchId);
+  
+      res.json(wonCatches);
+    } catch (error) {
+      console.error("Error fetching won catches:", error);
+      res.status(500).json({ error: 'Internal server error' });
     }
 };
