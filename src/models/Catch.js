@@ -45,6 +45,10 @@ const CatchSchema = new mongoose.Schema({
         type: String,
         enum: ['available', 'sold', 'expired'], // Example status options
         default: 'available'
+    },
+    buyerRated: {
+        type: Boolean,
+        default: false // Indicates whether the buyer has been rated by the seller
     }
 });
 
