@@ -6,7 +6,7 @@ const Bid = require('../models/Bid');
 const path = require('path');
 const fs = require('fs');
 
-// Controller function to fetch user profile
+// Controller function to fetch seller profile
 exports.getUserProfile = async (req, res) => {
   const userId = req.params.sellerId;
   try {
@@ -25,7 +25,7 @@ exports.getUserProfile = async (req, res) => {
       userType: user.userType,
       bio: user.bio,
       harbour: user.harbour,
-      profilePic: user.profilePic ? `${process.env.SURL}${user.profilePic}` : null, // Include profile picture URL if available
+      profilePic: user.profilePic ? user.profilePic : null, // Include profile picture URL if available
       catches,
       ratings
       // Add other relevant details as needed
@@ -56,7 +56,7 @@ exports.getBuyerProfile = async (req, res) => {
       userType: user.userType,
       bio: user.bio,
       harbour: user.harbour,
-      profilePic: user.profilePic ? `${process.env.SURL}${user.profilePic}` : null, // Include profile picture URL if available
+      profilePic: user.profilePic ? user.profilePic : null, // Include profile picture URL if available
       bids,
       ratings
       // Add other relevant details as needed
@@ -152,7 +152,7 @@ exports.updateUserProfile = async (req, res) => {
         userType: user.userType,
         bio: user.bio,
         harbour: user.harbour,
-        profilePic: user.profilePic ? `${process.env.SURL}${user.profilePic}` : null,
+        profilePic: user.profilePic ? user.profilePic : null,
       };
     }));
 
