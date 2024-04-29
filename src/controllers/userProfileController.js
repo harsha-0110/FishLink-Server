@@ -6,7 +6,7 @@ const Bid = require('../models/Bid');
 const path = require('path');
 const fs = require('fs');
 
-// Controller function to fetch user profile
+// Controller function to fetch seller profile
 exports.getUserProfile = async (req, res) => {
   const userId = req.params.sellerId;
   try {
