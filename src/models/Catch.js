@@ -50,6 +50,7 @@ const CatchSchema = new mongoose.Schema({
         type: Boolean,
         default: false // Indicates whether the buyer has been rated by the seller
     }
+    
 });
 
 const Catch = mongoose.model('Catch', CatchSchema);
