@@ -192,3 +192,26 @@ exports.getWonCatches = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+exports.getSellerByCatchId = async (req, res) => {
+    const catchId = req.params.id;
+
+    try {
+        const catchObj = await Catch.findById(catchId);
+
+        if (!catchObj) {
+            return res.status(404).json({ msg: 'Catch not found' });
+        }
+
+        const sellerId = catchObj.seller;
+
+        if (!sellerId) {
+            return res.status(404).json({ msg: 'Seller not found for this catch' });
+        }
+
+        res.json({ seller: sellerId });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: 'Server error' });
+    }
+};

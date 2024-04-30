@@ -10,6 +10,7 @@ exports.createSellerRating = async (req, res) => {
     try {
         // Extract necessary information from request body
         const { ratedSellerId, rating, comment, raterUserId } = req.body;
+        console.log(ratedSellerId, rating, comment, raterUserId);
 
         // Validate ObjectId
         if (!mongoose.Types.ObjectId.isValid(ratedSellerId)) {

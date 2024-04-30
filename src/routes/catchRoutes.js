@@ -38,4 +38,9 @@ router.get('/seller/delete-catch/:id', catchController.deleteCatch);
 // @access  Private (Buyer only)
 router.get('/catches/won/:buyerId', catchController.getWonCatches);
 
+
+// @route   GET api/catch/seller/:id
+// @desc    Get seller ObjectId from a catch ID
+// @access  Public
+router.get('/catch/seller/:id', catchController.getSellerByCatchId);
 module.exports = router;
