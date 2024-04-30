@@ -1,6 +1,7 @@
 const Catch = require('../models/Catch');
 const Rating = require('../models/Rating');
 const Bid = require('../models/Bid');
+const { ObjectId } = require('mongodb');
 
 exports.analytics = async (req, res) => {
     const sellerId = req.params.sellerId;
@@ -14,7 +15,7 @@ exports.analytics = async (req, res) => {
 
     const totalRevenueResult = await Catch.aggregate([
       {
-        $match: {status: 'sold' }
+        $match: {seller:  new ObjectId(sellerId), status: 'sold' }
       },
       {
         $group: {
@@ -25,7 +26,7 @@ exports.analytics = async (req, res) => {
     ]);
 
     const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].totalRevenue : 0;
-
+    
     // Calculate average rating (example implementation)
     const ratings = 4.5; // Assuming the average rating is 4.5
 
