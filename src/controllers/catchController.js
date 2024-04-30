@@ -184,6 +184,7 @@ exports.getWonCatches = async (req, res) => {
   
       // Extract relevant information about the won catches
       const wonCatches = winnerCatches.map(winner => winner.catchId);
+      //console.log(wonCatches);
   
       res.json(wonCatches);
     } catch (error) {

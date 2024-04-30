@@ -9,9 +9,7 @@ const Bid = require('../models/Bid');
 exports.createSellerRating = async (req, res) => {
     try {
         // Extract necessary information from request body
-        console.log("hi");
-        const { ratedSellerId, rating, comment, raterUserId} = req.body;
-        console.log(ratedSellerId, rating, comment, raterUserId);
+        const { ratedSellerId, rating, comment, raterUserId } = req.body;
 
         // Validate ObjectId
         if (!mongoose.Types.ObjectId.isValid(ratedSellerId)) {
@@ -40,6 +38,10 @@ exports.createSellerRating = async (req, res) => {
 
         // Save the seller rating to the database
         await newSellerRating.save();
+
+        // Update the rated seller's isSellerRated to true
+        ratedSeller.isSellerRated = true;
+        await ratedSeller.save();
 
         // Respond with success message
         res.status(201).json({ message: 'Seller rating created successfully', sellerRating: newSellerRating });
