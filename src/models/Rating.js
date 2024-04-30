@@ -19,6 +19,11 @@ const RatingSchema = new mongoose.Schema({
     commenterUsername: {
         type: String,
         required: true
+    },
+    catchId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Catch', // Reference to the catch associated with the rating
+        required: true
     }
 }, { timestamps: true });
 

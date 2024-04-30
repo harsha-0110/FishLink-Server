@@ -11,7 +11,8 @@ exports.createRating = async (req, res) => {
             ratedUserId,
             rating,
             comment,
-            commenterUsername
+            commenterUsername,
+            catchId
         });
 
         await newRating.save();
@@ -29,6 +30,7 @@ exports.createRating = async (req, res) => {
         res.status(500).json({ message: 'Failed to create rating' });
     }
 };
+
 exports.getRatingsByUserId = async (req, res) => {
     const { userId } = req.params;
 
@@ -41,20 +43,3 @@ exports.getRatingsByUserId = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch ratings' });
     }
 };
-
-// // Update buyerRated status
-// // Update buyerRated status
-// exports.updateBuyerRated = async (req, res) => {
-//     const catchId = req.body.catchId; // Assuming the catchId is sent in the request body
-//     console.log(catchId);
-//     try {
-//         const catchObj = await Catch.findByIdAndUpdate(catchId, { buyerRated: true });
-//         if (!catchObj) {
-//             return res.status(404).json({ msg: 'Catch not found' });
-//         }
-//         res.json({ msg: 'Buyer rating status updated successfully' });
-//     } catch (error) {
-//         console.error(error.message);
-//         res.status(500).json({ msg: 'Server error' });
-//     }
-// };
