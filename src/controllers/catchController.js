@@ -209,7 +209,8 @@ exports.getSellerByCatchId = async (req, res) => {
             return res.status(404).json({ msg: 'Seller not found for this catch' });
         }
 
-        res.json({ seller: sellerId });
+        // Sending both sellerId and catchId in the response
+        res.json({ seller: sellerId, catchId: catchObj._id });
     } catch (error) {
         console.error(error.message);
         res.status(500).json({ msg: 'Server error' });

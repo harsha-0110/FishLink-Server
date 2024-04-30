@@ -21,6 +21,11 @@ const SellerRatingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the user who is rating the seller
         required: true
+    },
+    catchId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Catch', // Reference to the catch associated with the rating
+        required: true
     }
 }, { timestamps: true });
 

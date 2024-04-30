@@ -8,6 +8,7 @@ const sellerRatingController = require('../controllers/sellerRatingController');
 router.post('/', sellerRatingController.createSellerRating);
 
 // Route to get ratings for a specific seller
-router.get('/:sellerId', sellerRatingController.getSellerRatings);
+router.get('/:sellerId/:catchId?', sellerRatingController.getSellerRatings);
+
 
 module.exports = router;
