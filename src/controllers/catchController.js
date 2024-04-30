@@ -10,34 +10,21 @@ exports.addCatch = async (req, res) => {
     const { name, email, images, location, basePrice, quantity, startTime, endTime } = req.body;
 
     try {
-        const user = await User.findOne({ email });
-        
-        // Array to store file paths of saved images
-        let imagePaths = [];
+        const user = await User.findOneAndUpdate({ email }, {}, { upsert: true, new: true });
 
-        // Loop through each base64 encoded image
-        for (let i = 0; i < images.length; i++) {
-            // Decode base64 image
-            const base64Data = images[i].replace(/^data:image\/\w+;base64,/, '');
+        const imagePaths = await Promise.all(images.map(async (image, i) => {
+            const base64Data = image.replace(/^data:image\/\w+;base64,/, '');
             const buffer = Buffer.from(base64Data, 'base64');
-
-            // Generate unique filename
-            const filename = `image_${Date.now()}_${i}.png`; // You can use any desired extension
-
-            // Specify path to save the image
+            const filename = `image_${Date.now()}_${i}.png`;
             const dirPath = path.join(__dirname, '../../uploads', user.id);
             if (!fs.existsSync(dirPath)) {
                 fs.mkdirSync(dirPath, { recursive: true });
             }
             const imagePath = path.join(dirPath, filename);
-            // Save the decoded image to the server
-            fs.writeFileSync(imagePath, buffer);
+            await fs.promises.writeFile(imagePath, buffer);
+            return `/uploads/${user.id}/${filename}`;
+        }));
 
-            // Push the file path to the array
-            imagePaths.push(`/uploads/${user.id}/${filename}`);
-        }
-
-        // Create a new catch object with image paths
         const catchObj = new Catch({
             name,
             images: imagePaths,
@@ -51,14 +38,12 @@ exports.addCatch = async (req, res) => {
             status: 'available'
         });
 
-        // Save the catch object to the database
         await catchObj.save();
         const imgUrl = `${process.env.SURL}${imagePaths[0]}`;
         notify.sendNotificationToAllPlayers("New Catch Added", name, imgUrl);
-        // Respond with success message
         res.status(201).json({ msg: 'Catch added successfully' });
     } catch (error) {
-        console.error(error.message);
+        console.error('Error adding catch:', error);
         res.status(500).json({ msg: 'Server error' });
     }
 };

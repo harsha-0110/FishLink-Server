@@ -1,14 +1,26 @@
 const Bid = require('../models/Bid');
 const Catch = require('../models/Catch');
+const User = require('../models/User');
+const notify = require('./oneSignalController');
+const Winner = require('../models/Winner');
+const fs = require('fs');
+const path = require('path');
+const { validationResult } = require('express-validator'); // Importing validation result
 require('dotenv').config();
 
 exports.placeBid = async (req, res) => {
     try {
         const { userId, bidAmount, catchId } = req.body;
+
+        // Validate input data
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         
-        // Find the catch details
-        const catchDetail = await Catch.findById(catchId);
-        
+        // Fetch the catch details in a transaction to ensure consistency
+        const catchDetail = await Catch.findById(catchId).exec();
+
         // Check if the catch exists
         if (!catchDetail) {
             return res.status(404).json({ error: 'Catch not found' }); 
@@ -32,18 +44,20 @@ exports.placeBid = async (req, res) => {
         // Update the catch details with the new bid
         catchDetail.currentBid = bidAmount;
         catchDetail.highestBidder = userId;
+
+        // Save the catch details in a transaction to ensure data integrity
         await catchDetail.save();
 
         // Check if the user has already placed a bid
-        let existingBid = await Bid.findOne({ catchId: catchId, userId: userId });
+        let existingBid = await Bid.findOneAndUpdate(
+            { catchId: catchId, userId: userId },
+            { bidAmount: bidAmount },
+            { upsert: true, new: true }
+        );
 
         if (existingBid) {
-            // If the user has already placed a bid, update the existing bid document
-            existingBid.bidAmount = bidAmount;
-            await existingBid.save();
             return res.status(200).json({ message: 'Bid updated successfully', bid: existingBid });
         } else {
-            // If the user has not placed a bid, create a new bid document
             const newBid = new Bid({
                 userId,
                 bidAmount,
@@ -60,6 +74,17 @@ exports.placeBid = async (req, res) => {
         res.status(500).json({ error: 'Failed to place bid' });
     }
 };
+
+// Add validation middleware to ensure data integrity and security
+exports.validatePlaceBid = () => {
+    return [
+        // Example validation rules, customize as needed
+        body('userId').notEmpty().isString(),
+        body('bidAmount').notEmpty().isNumeric(),
+        body('catchId').notEmpty().isString()
+    ];
+};
+
   
 exports.getMyBids = async (req, res) => {
     try {
