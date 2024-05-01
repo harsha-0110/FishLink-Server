@@ -97,7 +97,6 @@ exports.updateUserProfile = async (req, res) => {
 
 
   exports.searchUsers = async (req, res) => {
-  console.log("query");
   const query = req.query.q;
   
   try {
