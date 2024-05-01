@@ -48,16 +48,7 @@ exports.updateUserProfile = async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-  
-      // Check if there's an existing profile picture
-      if (user.profilePic) {
-        // Delete the old profile picture from the server
-        const oldImagePath = path.join(__dirname, '../../uploads', userId, path.basename(user.profilePic));
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
-      }
-  
+      
       // Update user's bio, harbour, and profile picture if available
       user.bio = bio;
       user.harbour = harbour;
