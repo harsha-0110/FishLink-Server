@@ -8,7 +8,7 @@ const fs = require('fs');
 
 // Controller function to fetch seller profile
 exports.getUserProfile = async (req, res) => {
-  const userId = req.params.sellerId;
+  const userId = req.params.userId;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -26,7 +26,6 @@ exports.getUserProfile = async (req, res) => {
       bio: user.bio,
       harbour: user.harbour,
       profilePic: user.profilePic ? user.profilePic : null, // Include profile picture URL if available
-      catches,
       ratings
       // Add other relevant details as needed
     };
@@ -37,39 +36,6 @@ exports.getUserProfile = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-exports.getBuyerProfile = async (req, res) => {
-  const userId = req.params.buyerId;
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const bids = await Bid.find({ userId: userId });
-    const ratings = await Rating.find({ userId: userId });
-
-    const buyerProfile = {
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      userType: user.userType,
-      bio: user.bio,
-      harbour: user.harbour,
-      profilePic: user.profilePic ? user.profilePic : null, // Include profile picture URL if available
-      bids,
-      ratings
-      // Add other relevant details as needed
-    };
-
-    res.status(200).json(buyerProfile);
-  } catch (error) {
-    console.error("Error fetching buyer profile:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-
 
 exports.updateUserProfile = async (req, res) => {
     const userId = req.params.userId;
@@ -131,7 +97,9 @@ exports.updateUserProfile = async (req, res) => {
 
 
   exports.searchUsers = async (req, res) => {
+  console.log("query");
   const query = req.query.q;
+  
   try {
     const users = await User.find({
       $or: [
@@ -142,8 +110,6 @@ exports.updateUserProfile = async (req, res) => {
     }).select('-password');
 
     const usersWithDetails = await Promise.all(users.map(async (user) => {
-      
-
       return {
         _id: user._id,
         name: user.name,
