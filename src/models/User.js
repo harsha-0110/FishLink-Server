@@ -37,10 +37,12 @@ const UserSchema = new mongoose.Schema({
     },
     // New fields
     bio: {
-        type: String
+        type: String,
+        default: ""
     },
     harbour: {
-        type: String
+        type: String,
+        default: ""
     },
     profilePic: {
         type: String
