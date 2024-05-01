@@ -1,6 +1,7 @@
 const Catch = require('../models/Catch');
 const Rating = require('../models/Rating');
 const Bid = require('../models/Bid');
+const SellerRating = require('../models/sellerRating');
 const { ObjectId } = require('mongodb');
 
 exports.analytics = async (req, res) => {
@@ -27,8 +28,13 @@ exports.analytics = async (req, res) => {
 
     const totalRevenue = totalRevenueResult.length > 0 ? totalRevenueResult[0].totalRevenue : 0;
     
-    // Calculate average rating (example implementation)
-    const ratings = 4.5; // Assuming the average rating is 4.5
+    // Fetch average rating from SellerRating model
+    const sellerRatings = await SellerRating.find({ ratedSellerId: sellerId });
+    let totalRating = 0;
+    sellerRatings.forEach((rating) => {
+      totalRating += rating.rating;
+    });
+    const ratings = sellerRatings.length > 0 ? (totalRating / sellerRatings.length).toFixed(1) : 0;
 
     // Send the analytics data back to the client
     res.json({
