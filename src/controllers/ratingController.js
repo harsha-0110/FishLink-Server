@@ -43,3 +43,22 @@ exports.getRatingsByUserId = async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch ratings' });
     }
 };
+
+exports.getBuyerRatings = async (req, res) => {
+    try {
+        const { buyerId, catchId } = req.params;
+        const query = { ratedUserId: buyerId };
+        if (catchId) {
+            query.catchId = catchId;
+        }
+        const buyerRatings = await Rating.find(query);
+        res.status(200).json(buyerRatings);
+    } catch (error) {
+        console.error('Error fetching seller ratings:', error);
+        if (error.name === 'CastError') {
+            res.status(400).json({ error: 'Invalid seller or catch ID' });
+        } else {
+            res.status(500).json({ error: 'Failed to fetch seller ratings' });
+        }
+    }
+};
