@@ -31,7 +31,7 @@ exports.getChatMessages = async (req, res) => {
                 { senderId, receiverId },
                 { senderId: receiverId, receiverId: senderId }
             ]
-        }).sort({ timestamp: 'asc' });
+        }).select('senderId receiverId message timestamp').sort({ timestamp: 'asc' });
 
         res.status(200).json(messages);
     } catch (error) {
@@ -39,6 +39,7 @@ exports.getChatMessages = async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch chat messages' });
     }
 };
+
 
 
 
