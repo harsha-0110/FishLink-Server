@@ -5,11 +5,11 @@ const Catch = require('../models/Catch');
 
 exports.sendMessage = async (req, res) => {
     try {
-        const { senderId, receiverId, message } = req.body;
+        const { senderId, catchId, message } = req.body; // Modified to use catchId instead of receiverId
 
         const newMessage = new ChatMessage({
             senderId,
-            receiverId,
+            catchId, // Modified to use catchId instead of receiverId
             message
         });
 
@@ -24,14 +24,18 @@ exports.sendMessage = async (req, res) => {
 
 exports.getChatMessages = async (req, res) => {
     try {
-        const { senderId, receiverId } = req.params;
+        const { senderId, catchId } = req.params; // Modified to use catchId instead of receiverId
+
+        // const messages = await ChatMessage.find({
+        //     $or: [
+        //         { senderId, catchId }, // Modified to use catchId instead of receiverId
+        //         { senderId: catchId, catchId: senderId } // Modified to use catchId instead of receiverId
+        //     ]
+        // }).select('senderId catchId message timestamp').sort({ timestamp: 'asc' }); // Modified to use catchId instead of receiverId
 
         const messages = await ChatMessage.find({
-            $or: [
-                { senderId, receiverId },
-                { senderId: receiverId, receiverId: senderId }
-            ]
-        }).select('senderId receiverId message timestamp').sort({ timestamp: 'asc' });
+            catchId: catchId // Only search for messages with the provided catchId
+        }).select('senderId catchId message timestamp').sort({ timestamp: 'asc' });
 
         res.status(200).json(messages);
     } catch (error) {
@@ -41,13 +45,33 @@ exports.getChatMessages = async (req, res) => {
 };
 
 
+// exports.getChatMessages = async (req, res) => {
+//     try {
+//         const { userId } = req.params;
+
+//         const messages = await ChatMessage.find({
+//             $or: [
+//                 { senderId: userId },
+//                 { receiverId: userId }
+//             ]
+//         }).select('senderId receiverId message timestamp').sort({ timestamp: 'asc' });
+
+//         res.status(200).json(messages);
+//     } catch (error) {
+//         console.error('Error fetching chat messages:', error);
+//         res.status(500).json({ error: 'Failed to fetch chat messages' });
+//     }
+// };
+
+
+
 
 
 exports.win_details = async (req, res) => {
     const catchId = req.params.id;
 
     try {
-        console.log(catchId);
+        //console.log(catchId);
         const catchObj = await Catch.findById(catchId);
 
         if (!catchObj) {
