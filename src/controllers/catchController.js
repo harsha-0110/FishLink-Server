@@ -112,7 +112,6 @@ exports.editCatch = async (req, res) => {
 
         // Update catch details
         catchObj.name = name;
-        catchObj.images = images;
         catchObj.location = location;
         catchObj.basePrice = basePrice;
         catchObj.quantity = quantity;
