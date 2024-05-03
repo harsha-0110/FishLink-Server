@@ -45,24 +45,6 @@ exports.getChatMessages = async (req, res) => {
 };
 
 
-// exports.getChatMessages = async (req, res) => {
-//     try {
-//         const { userId } = req.params;
-
-//         const messages = await ChatMessage.find({
-//             $or: [
-//                 { senderId: userId },
-//                 { receiverId: userId }
-//             ]
-//         }).select('senderId receiverId message timestamp').sort({ timestamp: 'asc' });
-
-//         res.status(200).json(messages);
-//     } catch (error) {
-//         console.error('Error fetching chat messages:', error);
-//         res.status(500).json({ error: 'Failed to fetch chat messages' });
-//     }
-// };
-
 
 
 
