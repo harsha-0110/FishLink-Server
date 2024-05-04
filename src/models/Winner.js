@@ -11,6 +11,10 @@ const winnerSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  status: {
+    type: String,
+    default: 'payment', // Initial status
+  },
 });
 
 const Winner = mongoose.model('Winner', winnerSchema);

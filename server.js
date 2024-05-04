@@ -23,6 +23,7 @@ app.use('/api/ratings', require('./src/routes/ratingRoutes'));
 app.use('/api', require('./src/routes/userProfileRoutes'));
 app.use('/api/ratings/sellers', require('./src/routes/sellerRatingRoutes'));
 app.use('/api', require('./src/routes/chatRoutes'));
+app.use('/api', require('./src/routes/winRoutes'));
 
 
 
