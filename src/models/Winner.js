@@ -13,7 +13,7 @@ const winnerSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'payment', // Initial status
+    default: 'initial', // Initial status
   },
 });
 
