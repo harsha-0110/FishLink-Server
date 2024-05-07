@@ -9,11 +9,14 @@ exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
+        if (email.trim() == "" || email == null) {
+            return res.status(404).json({ msg: 'Please enter the email' });
+        }
         // Find the user with the provided email
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
+            return res.status(404).json({ msg: 'Email not found' });
         }
 
         // Generate a reset password token
